@@ -1,0 +1,166 @@
+<h1><?= isset($this->entity->id) ? 'Modifier' : 'Créer' ?> une plante</h1>
+
+<form action="<?= PlantUrl::getApply($this->entity->getId()) ?>" method="POST" class="was-validated">
+	
+	<div class="form-floating mb-3">
+		<input type="text" class="form-control" id="name" name="name" placeholder="Nom" value="<?= $this->entity->getName() ?>" required>
+		<label for="name">Nom</label>
+	</div>
+	
+	<div class="form-floating mb-3">
+		<input type="text" class="form-control" id="nom_latin" name="nom_latin" placeholder="Nom Latin" value="<?= $this->entity->getNomLatin() ?>">
+		<label for="name">Nom Latin</label>
+	</div>
+	
+	<div class="form-floating mb-3">
+		<select class="form-select" id="type" name="type" required>
+			<?php
+				foreach ($this->types as $type) {
+					echo '<option value="' . $type->getId() . '" ' . ($this->entity->type === $type->getId() ? 'selected' : '') . '>' . $type->getName() . '</option>';
+				}
+			?>
+		</select>
+		<label for="type">Type</label>
+	</div>
+	
+	<div class="form-floating mb-3">
+		<select class="form-select" id="porte_greffe" name="porte_greffe">
+			<option value="">Non connu</option>
+			<?php
+				foreach ($this->portegreffes as $pg) {
+					echo '<option value="' . $pg->getId() . '" ' . ($this->entity->porte_greffe === $pg->getId() ? 'selected' : '') . '>' . $pg->getName() . '</option>';
+				}
+			?>
+			<option value="-new-">Nouveau...</option>
+			
+		</select>
+		<input type="text" name="new_porte_greffe" id="new_porte_greffe" placeholder="Nouveau porte greffe..." class="form-control d-none"/>
+		<label for="porte_greffe">Porte greffe</label>
+	</div>
+	
+	<div class="form-floating mb-3">
+		<input type="number" class="form-control" id="rusticite" name="rusticite" placeholder="Rusticité" value="<?= $this->entity->getRusticite() ?>">
+		<label for="name">Rusticité</label>
+	</div>
+	
+	<?php $mois = ['Choisir...', 'Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre']; ?>
+	<div class="input-group mb-3">
+		<label class="input-group-text" for="mois_fleur_debut">Début floraison</label>
+		<select class="form-select" id="mois_fleur_debut" name="mois_fleur_debut">
+			<?php
+				foreach ($mois as $num => $label) {
+					echo '<option value="' . $num . '" ' . ($this->entity->getMoisFleurDebut() == $num ? 'selected' : '') . '>' . $label . '</option>';
+				}
+			?>
+		</select>
+		<label class="input-group-text" for="mois_fleur_fin">Fin floraison</label>
+		<select class="form-select" id="mois_fleur_fin" name="mois_fleur_fin">
+			<?php
+				foreach ($mois as $num => $label) {
+					echo '<option value="' . $num . '" ' . ($this->entity->getMoisFleurFin() == $num ? 'selected' : '') . '>' . $label . '</option>';
+				}
+			?>
+		</select>
+		<select class="form-select" id="p_fleur" name="p_fleur">
+			<option value="">Ou choisir une période</option>
+			<?php
+				foreach ($this->entity->PERIODES as $periode) {
+					echo '<option value="' . $periode . '" ' . ($this->entity->getPFleur() == $periode ? 'selected' : '') . '>' . $periode . '</option>';
+				}
+			?>
+		</select>
+	</div>
+	<div class="input-group mb-3">
+		<label class="input-group-text" for="mois_fructi_debut">Début récolte</label>
+		<select class="form-select" id="mois_fructi_debut" name="mois_fructi_debut">
+			<?php
+				foreach ($mois as $num => $label) {
+					echo '<option value="' . $num . '" ' . ($this->entity->getMoisFructiDebut() == $num ? 'selected' : '') . '>' . $label . '</option>';
+				}
+			?>
+		</select>
+		<label class="input-group-text" for="mois_fructi_fin">Fin récolte</label>
+		<select class="form-select" id="mois_fructi_fin" name="mois_fructi_fin">
+			<?php
+				foreach ($mois as $num => $label) {
+					echo '<option value="' . $num . '" ' . ($this->entity->getMoisFructiFin() == $num ? 'selected' : '') . '>' . $label . '</option>';
+				}
+			?>
+		</select>
+		<select class="form-select" id="p_fruit" name="p_fructi">
+			<option value="">Ou choisir une période</option>
+			<?php
+				foreach ($this->entity->PERIODES as $periode) {
+					echo '<option value="' . $periode . '" ' . ($this->entity->getPFructi() == $periode ? 'selected' : '') . '>' . $periode . '</option>';
+				}
+			?>
+		</select>
+	</div>
+	
+	<div class="form-floating mb-3">
+		<input type="date" class="form-control" id="add_date" name="add_date" placeholder="Date d'ajout" value="<?= (new DateTime($this->entity->add_date))->format('Y-m-d') ?>" required>
+		<label for="add_date">Date d'ajout</label>
+	</div>
+	<div class="form-floating mb-3">
+		<select class="form-select" id="type_origine" name="type_origine">
+			<option value="">Aucun</option>
+			<?php
+				foreach ($this->entity->TYPES_ORIGNE as $type => $label) {
+					echo '<option value="' . $type. '" ' . ($this->entity->type_origine === $type ? 'selected' : '') . '>' . $label . '</option>';
+				}
+			?>
+		</select>
+		<label for="type_origine">Type d'origine</label>
+	</div>
+	<div class="form-floating mb-3">
+		<select class="form-select" id="group" name="group">
+			<option value="">Sans groupe</option>
+			<?php
+				foreach ($this->groups as $group) {
+					echo '<option value="' . $group->getId() . '" ' . ($this->entity->group === $group->getId() || empty($this->entity->group) && $_SESSION['selectedBaseListGroup'] === $group->getId() ? 'selected' : '') . '>' . $group->getName() . '</option>';
+				}
+			?>
+		</select>
+		<label for="group">Groupe</label>
+	</div>
+	
+	<div class="form-floating mb-3">
+		<select class="form-select" id="lieu_origine" name="lieu_origine">
+			<option value="">Non connu</option>
+			<?php
+				foreach ($this->lieux as $lieu) {
+					echo '<option value="' . $lieu->getId() . '" ' . ($this->entity->lieu_origine === $lieu->getId() ? 'selected' : '') . '>' . $lieu->getName() . '</option>';
+				}
+			?>
+		</select>
+		<label for="lieu_origine">Lieu d'origine</label>
+	</div>
+	
+	<div class="form-floating mb-3">
+		<select class="form-select" id="parent" name="parent">
+			<option value="">Sans parent</option>
+			<?php
+				foreach ($this->vegetables as $vegetable) {
+					echo '<option value="' . $vegetable->getId() . '" ' . ($this->entity->parent === $vegetable->getId() ? 'selected' : '') . '>' . $vegetable->getName() . '</option>';
+				}
+			?>
+		</select>
+		<label for="parent">Parent</label>
+	</div>
+	<button type="submit" class="btn btn-primary">Enregistrer</button>
+</form>
+<script>
+	
+	var pgSelect = document.getElementById("porte_greffe");
+	
+	pgSelect.onchange = function() {
+		var pgInput = document.getElementById("new_porte_greffe");
+		if (this.value === "-new-") {
+			pgInput.classList.remove('d-none');
+		} else {
+			pgInput.classList.add('d-none');
+		}
+	}
+
+	
+</script>

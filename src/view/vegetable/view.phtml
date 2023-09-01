@@ -1,0 +1,173 @@
+<h1><?= $this->entity->getName() ?> <a href="?controller=vegetable&action=edit&id=<?= $this->entity->getId() ?>" class="btn btn-outline-secondary"><i class="bi bi-pencil-square"></i></a></h1>
+<dl class="row">
+  <dt class="col-sm-3">Nom</dt>
+  <dd class="col-sm-9"><?= $this->entity->getName() ?></dd>
+  
+  <?php if(!empty($this->entity->nom_latin)) { ?>
+  <dt class="col-sm-3">Nom Latin</dt>
+  <dd class="col-sm-9"><?= $this->entity->getNomLatin() ?></dd>
+  <?php } ?>
+  
+  <dt class="col-sm-3">Type</dt>
+  <dd class="col-sm-9"><?= $this->entity->getType()->getName() ?></dd>
+  
+  <?php if(isset($this->entity->porte_greffe)) { ?>
+  <dt class="col-sm-3">Porte greffe</dt>
+  <dd class="col-sm-9"><?= $this->entity->getPorteGreffe()->getName() ?></dd>
+  <?php } ?>
+  
+  <dt class="col-sm-3">Date d'ajout</dt>
+  <dd class="col-sm-9"><?= $this->entity->getAddDate() ?></dd>
+  
+  <?php if(isset($this->entity->rusticite)) { ?>
+  <dt class="col-sm-3">Rusticité</dt>
+  <dd class="col-sm-9"><?= $this->entity->getRusticite() ?></dd>
+  <?php } ?>
+  
+  <?php $mois = ['Choisir...', 'Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre']; 
+  if(!empty($this->entity->mois_fleur_debut) && !empty($this->entity->mois_fleur_fin)) { 
+  ?>
+  <dt class="col-sm-3">Période de floraison</dt>
+  <dd class="col-sm-9"><?= $mois[$this->entity->getMoisFleurDebut()] ?> - <?= $mois[$this->entity->getMoisFleurFin()] ?></dd>
+  <?php } ?>
+  
+  <?php if(!empty($this->entity->mois_fructi_debut) && !empty($this->entity->mois_fructi_fin)) { ?>
+  <dt class="col-sm-3">Période de récolte</dt>
+  <dd class="col-sm-9"><?= $mois[$this->entity->getMoisFructiDebut()] ?> - <?= $mois[$this->entity->getMoisFructiFin()] ?></dd>
+  <?php } ?>
+  
+  <?php if(isset($this->entity->type_origine)) { ?>
+  <dt class="col-sm-3">Type d'origine</dt>
+  <dd class="col-sm-9"><?= $this->entity->getTypeOrigine() ?></dd>
+  <?php } ?>
+  
+  <?php if(isset($this->entity->group)) { ?>
+  <dt class="col-sm-3">Groupe</dt>
+  <dd class="col-sm-9"><?= $this->entity->getGroup()->getName() ?></dd>
+  <?php } ?>
+  
+  <?php if(isset($this->entity->lieu_origine)) { ?>
+  <dt class="col-sm-3">Lieu d'origine</dt>
+  <dd class="col-sm-9"><?= $this->entity->getLieuOrigine()->getName() ?></dd>
+  <?php } ?>
+  
+  <?php if(isset($this->entity->parent)) { ?>
+  <dt class="col-sm-3">Issu de</dt>
+  <dd class="col-sm-9"><?= $this->entity->getParent()->getName() ?></dd>
+  <?php } ?>
+</dl>
+
+
+<!-- Nav tabs -->
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="photos-tab" data-bs-toggle="tab" data-bs-target="#photos" type="button" role="tab" aria-controls="photos" aria-selected="true">Photos</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="actions-tab" data-bs-toggle="tab" data-bs-target="#actions" type="button" role="tab" aria-controls="actions" aria-selected="false">Actions</button>
+  </li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+  <div class="tab-pane active" id="photos" role="tabpanel" aria-labelledby="photos-tab">
+  	<h2>Photos <a class="btn btn-outline-primary" href="?controller=photo&action=edit&vegetable=<?= $this->entity->getId() ?>" role="button">+</a></h2>
+  	<?php 
+	$photos = $this->getPhotos($this->entity->getId());
+	if( !is_array($photos)) { ?>
+		Pas encore de photo !
+	<?php } else { ?>
+	
+	
+		<div id="carouselCaptions" class="carousel slide" data-bs-ride="carousel">
+		  <div class="carousel-indicators">
+		  	<?php for($i = 0; $i < count($photos); $i++) { ?>
+		    	<button type="button" data-bs-target="#carouselCaptions" data-bs-slide-to="<?= $i ?>" class="<?= $i === 0 ? 'active' : '' ?>" aria-current="true" aria-label="Slide 1"></button>
+		    <?php } ?>
+		  </div>
+		  <div class="carousel-inner">
+		  	<?php for($i = 0; $i < count($photos); $i++) { ?>
+		    <div class="carousel-item <?= $i === 0 ? 'active' : '' ?>">
+		      <div class="d-block w-100 position-relative" style="height: 500px;">
+		      	<div class="fs-2 default-photo">
+		      	<?php if ($photos[$i]->getId() === $this->entity->getDefaultPhoto()->getId()) { ?>
+		      		<i class="bi bi-bookmark-star-fill" style="color: red"></i>
+		      	<?php } else { ?>
+		      		<a href="?controller=vegetable&action=setdefaultphoto&vegetable=<?= $this->entity->getId() ?>&photo=<?= $photos[$i]->getId() ?>"><i class="bi bi-bookmark-star"></i></a>
+		      	<?php } ?>
+		      	</div>
+		        <img src="<?= $photos[$i]->getThumbPath('H', 500) ?>" height="500px" class="position-absolute top-50 start-50 translate-middle" alt="...">
+		      </div>
+		      <?php if (isset($photos[$i]->action)) { ?>
+			      <div class="carousel-caption d-none d-md-block">
+			        <h5><?= $photos[$i]->getAction()->getTypeAction() . ' ' . $photos[$i]->getAction()->getTitle() ?></h5>
+			        <p><?= $photos[$i]->getAction()->getComment() ?></p>
+			      </div>
+		       <?php } ?>
+		    </div>
+		    <?php } ?>
+		  </div>
+		  <button class="carousel-control-prev" type="button" data-bs-target="#carouselCaptions" data-bs-slide="prev">
+		    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+		    <span class="visually-hidden">Previous</span>
+		  </button>
+		  <button class="carousel-control-next" type="button" data-bs-target="#carouselCaptions" data-bs-slide="next">
+		    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+		    <span class="visually-hidden">Next</span>
+		  </button>
+		</div>
+		<a class="" href="?controller=photo&action=listByVegetable&vegetable=<?= $this->entity->getId() ?>" role="button">liste des photos</a>
+	<?php } ?>
+  </div>
+  <div class="tab-pane" id="actions" role="tabpanel" aria-labelledby="actions-tab">
+  	<h2>Actions <a class="btn btn-outline-primary" href="?controller=action&action=edit&vegetable=<?= $this->entity->getId() ?>" role="button">+</a></h2>
+  	<?php 
+	$actions = $this->entity->getActions();
+	if( !is_array($actions)) { ?>
+		Pas encore d'actions ! <a href="?controller=action&action=edit&vegetable=<?= $this->entity->getId() ?>" >Ajouter une action</a>
+	<?php } else { ?>
+		<table  class="table">
+			<thead>
+				<tr><th></th></th><th>Date</th><th>Type</th><th>Commentaire</th></tr>
+			</thead>
+			<tbody>
+				<?php
+				foreach ($actions as $action) { ?>
+					<tr>
+						<td>
+							<div class="w-100 text-center position-relative">
+							<?php
+								$photos = $this->getPhotosAction($action->getId());
+								if (is_array($photos)) {
+									?>
+									<img src="<?= $photos[0]->getThumbPath('H', 115) ?>" class="rounded" height="115px"/>
+									<?php if (count($photos) > 1) { ?>
+										<span class="position-absolute bottom-0 start-50 translate-middle badge rounded-pill bg-secondary">+ <?= (count($photos) - 1) ?></span>
+									<?php } ?>
+								<?php } else { ?>
+									<img src="./plante.png" class="rounded" height="115px"/>
+								<?php } ?>
+							</div>
+						</td>
+						<td>
+							<?= $action->getDate() ?>
+						</td>
+						<td>
+							<?= $action->getTypeAction() ?>
+						</td>
+						<td>
+							<h3><?= $action->getTitle();?></h3>
+							<?= $action->getComment() ?>
+						</td>
+						<td>
+							<a href="?controller=action&action=edit&id=<?= $action->getId() ?>" class="btn btn-outline-secondary"><i class="bi bi-pencil-square"></i></a>
+						</td>
+					</tr>
+				<?php
+				} ?>
+			</tbody>
+		</table>
+	<?php } ?>
+  </div>
+</div>
+

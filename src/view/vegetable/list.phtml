@@ -1,0 +1,152 @@
+<h1>Liste des plantes (<?= $this->nb_vegetables ?>) <a class="btn btn-outline-primary" href="<?= PlantUrl::getEdit() ?>" role="button">+</a></h1>
+
+<?php
+if (is_array($this->vegetables) || isset($_GET['search-name']) || isset($_GET['search-type'])) { ?>
+	<form class="row g-3" method="GET">
+		<input type="hidden" name="controller" value="vegetable" />
+		<input type="hidden" name="action" value="list" />
+		<input type="hidden" name="l" value="<?= $this->length ?>" />
+		<div class="col-auto form-floating">
+			<input id="search-name" name="search-name" class="form-control" type="text" placeholder="Nom" value="<?= $_GET['search-name'] ?? '' ?>">
+			<label for="search-name">Chercher par nom...</label>
+		</div>
+		<div class="col-auto form-floating">
+			<select class="form-select" id="search-type" name="search-type">
+				<option value="">Filtrer par type...</option>
+				<?php
+					foreach ($this->types as $type) {
+						echo '<option value="' . $type->getId() . '" ' . (($_GET['search-type'] ?? '') === $type->getId() ? 'selected' : '') . '>' . $type->getName() . '</option>';
+					}
+				?>
+			</select>
+			<label for="search-type">Filtrer par type</label>
+		</div>
+		<div class="col-auto form-floating">
+			<button type="submit" class="btn btn-primary mb-3 btn-lg"><i class="bi bi-search"></i></button>
+		</div>
+	</form>
+	<?php if (is_array($this->vegetables)) { ?>
+	<div class="container">
+		<div class="row">
+			<?php foreach ($this->vegetables as $vegetable) { 
+			$photos = $this->getPhotos($vegetable->getId());
+			$photoCount = 0;
+			if (is_array($photos) && count($photos) > 0) {
+				$photoCount = count($photos);
+			}
+			$photoPath = $vegetable->getDefaultPhoto()->getThumbPath('H', 225);
+			?>
+			<div class="col-xxl-3 col-xl-3 col-lg-4 col-md-6 col-sm-6 col-xs-6 col-6" style="margin-bottom: 12px;">
+				<div class="card h-100" style="/*width: 18rem;*/">
+					<a href="<?= PlantUrl::getView($vegetable->getId()) ?>">
+						<img src="<?= $photoPath ?>" class="card-img-top center-img" alt="<?= $vegetable->getName() ?>">
+					</a>
+					<input type="checkbox" value="<?= $vegetable->getId() ?>" class="vegetable-selection" onchange="groupSelectionChange()"/>
+					<?php if ($photoCount > 1) { ?>
+						<span class="badge photo-count-badge bg-secondary">+ <?= ($photoCount - 1) ?></span>
+					<?php } ?>
+					<div class="card-body">
+						<h5 class="card-title">
+							<a href="<?= PlantUrl::getView($vegetable->getId()) ?>" class=""><?= $vegetable->getName() ?></a>
+							
+						</h5>
+						<h6 class="card-subtitle mb-2 text-muted">
+							<?= $vegetable->porte_greffe !== null ? $vegetable->getPorteGreffe()->getName() : '' ?> <span class="float-end"><?= $vegetable->getRusticite() ?></span>
+						</h6>
+						<p class="card-text">
+							<?= $vegetable->getType()->getName() ?>
+						</p>
+						
+					</div>
+					<form action="<?= PlantUrl::get('photo', 'uploadVegetable', ['vegetable' => $vegetable->getId()]) ?>" method="POST" enctype="multipart/form-data" class="card-footer text-center input-group">
+						<a href="<?= PlantUrl::getView($vegetable->getId()) ?>" class="btn btn-outline-secondary" title="Modifier la plante"><i class="bi bi-pencil-square"></i></a>
+						<a href="<?= PlantUrl::get('action', 'edit', ['vegetable' => $vegetable->getId()]) ?>" class="card-link btn btn-outline-secondary" title="Ajouter une action"><i class="bi bi-journal-plus"></i></a>
+						
+						<label class="input-group-text btn-outline-secondary  d-none d-md-block" for="photos_<?= $vegetable->getId() ?>" title="Selectionner des photos à ajouter...">+ <span id="nbphotos_<?= $vegetable->getId() ?>"></span> Photos...</label>
+						<input type="file" class="form-control d-none" id="photos_<?= $vegetable->getId() ?>" aria-describedby="inputGroupFileAddon<?= $vegetable->getId() ?>"
+						aria-label="Upload" name='photo[]' accept='image/*' multiple
+						     onchange="inputFileChange(this, <?= $vegetable->getId() ?>)" style="display: none;">
+						<button class="btn btn-outline-secondary disabled  d-none d-md-block" type="submit" id="inputGroupFileAddon<?= $vegetable->getId() ?>" title="Ajouter les photos"><span class="add_ico"><i class="bi bi-camera"></i></span></button>
+					</form>
+				</div>
+			</div>
+			<?php } ?>
+		</div>
+	</div>
+	
+	<?php
+	$nbPages = intval(ceil($this->nb_vegetables / $this->length));
+	?>
+	<div class="pagination-container">
+		<nav aria-label="Page navigation example">
+			<ul class="pagination">
+				<li class="page-item <?= $this->page === 1 ? 'disabled' : '' ?>">
+					<a class="page-link" href="<?= PlantUrl::getList(['p' => $this->page - 1]) ?>" aria-label="Previous" >
+						<span aria-hidden="true">&laquo;</span>
+					</a>
+				</li>
+				<?php for ($p = 1; $p <= $nbPages; $p++) { ?>
+					<li class="page-item <?= $p === $this->page ? 'disabled' : '' ?>">
+						<a class="page-link" href="<?= PlantUrl::getList(['p' => $p]) ?>"><?= $p ?></a>
+					</li>
+				<?php } ?>
+				<li class="page-item <?= $nbPages === $this->page ? 'disabled' : '' ?>">
+					<a class="page-link" href="<?= PlantUrl::getList(['p' => $this->page + 1]) ?>" aria-label="Next">
+						<span aria-hidden="true">&raquo;</span>
+					</a>
+				</li>
+			</ul>
+		</nav>
+		<div class="dropdown">
+			<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+				Plantes par pages : <?= $this->length ?>
+			</button>
+			<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+				<li><a class="dropdown-item" href="<?= PlantUrl::getList(['p' => 1, 'l' => 10]) ?>">10</a></li>
+				<li><a class="dropdown-item" href="<?= PlantUrl::getList(['p' => 1, 'l' => 25]) ?>">25</a></li>
+				<li><a class="dropdown-item" href="<?= PlantUrl::getList(['p' => 1, 'l' => 50]) ?>">50</a></li>
+			</ul>
+		</div>
+	</div>
+	<form action="?controller=action&action=edit" method="POST">
+		<div id="multiples_fields"></div>
+		<button class="btn btn-outline-secondary" type="submit" >Action multiple</button>
+	</form>
+	<?php
+	} else { ?>
+		Pas de résultats
+	<?php } ?>
+	
+<?php
+}
+else { ?>
+	Pas encore de plante ! <a href="<?= PlantUrl::getEdit() ?>" >Créer une plante</a>
+<?php
+} ?>
+
+<script>
+	function inputFileChange(elt, id) {
+		var countElt = document.getElementById("nbphotos_" + id);
+		countElt.innerText = " " + elt.files.length + " ";
+		var btn = document.getElementById("inputGroupFileAddon" + id);
+		// btn.classList.add("btn-primary");
+		btn.classList.remove('disabled');
+		// btn.classList.remove('btn-outline-secondary');
+	}
+	
+	function groupSelectionChange() {
+		const groupFields = document.getElementById('multiples_fields');
+		let vegetables = [...document.getElementsByClassName('vegetable-selection')].filter( (e) => e.checked ).map( (e) => e.value );
+		console.log(vegetables);
+		let innerHtml = '';
+		vegetables.forEach( e => {
+			innerHtml += '<input type="hidden" name="vegetables[]" value="' + e + '" />';
+		});
+		groupFields.innerHTML = innerHtml;
+	}
+	
+	function submitMultiple() {
+		
+	}
+	
+</script>

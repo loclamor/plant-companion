@@ -1,0 +1,108 @@
+<h1><?= isset($this->entity->id) ? 'Modifier' : ($this->isGroup ? 'Ajout multiple d\'' : 'Ajouter') ?> une action <?= isset($this->entity->vegetable) ? 'sur ' . $this->entity->getVegetable()->getName() : '' ?></h1>
+
+<form action="<?= PlantUrl::getApply($this->entity->getId()) ?>" method="POST" enctype="multipart/form-data" class="was-validated">
+	<?php if ($this->isGroup === false) { ?>
+		<div class="form-floating mb-3">
+			<select class="form-select" id="vegetable" name="vegetable" required>
+				<?php
+					foreach ($this->vegetables as $vegetable) {
+						echo '<option value="' . $vegetable->getId() . '" ' . ($this->entity->vegetable === $vegetable->getId() ? 'selected' : '') . '>' . $vegetable->getName() . '</option>';
+					}
+				?>
+			</select>
+			<label for="vegetable">Plante</label>
+		</div>
+	<?php } else { ?>
+	<ul>
+	<?php
+		// vegetables as hidden fields
+		foreach ($this->vegetables as $v) {
+	?>
+		<li>
+			<?= $v->getName() ?>
+			<input type="hidden" name="vegetables[]" value="<?= $v->getId() ?>" />
+		</li>
+	<?php } ?>
+	</ul>
+	<?php } ?>
+	<div class="form-floating mb-3">
+		<input type="date" class="form-control" id="date" name="date"  value="<?= (new DateTime($this->entity->date))->format('Y-m-d') ?>" required>
+		<label for="date">Date</label>
+	</div>
+	
+	<div class="form-floating mb-3">
+		<select class="form-select" id="type_action" name="type_action" required>
+			<?php foreach ($this->entity->TYPES_ACTION as $type => $label) { ?>
+				<option value="<?= $type ?>" <?= ($this->entity->getTypeAction() === $type ? 'selected' : '') ?>><?= $label ?></option>
+			<?php } ?>
+		</select>
+		<label for="type_action">Type</label>
+	</div>
+	
+
+	<div class="form-floating mb-3 d-none" id="title_form" >
+		<input type="text" class="form-control" id="title" name="title" placeholder="Titre"  value="<?= $this->entity->getTitle() ?>">
+		<label for="title">Titre</label>
+	</div>
+	
+	<div class="form-floating mb-3" id="observation_form">
+		<select class="form-select" id="title_observation" name="observation">
+			<?php foreach ($this->entity->TITLE_OBSERVATION as $observation => $label) { ?>
+				<option value="<?= $observation ?>" <?= (trim($this->entity->getTitle()) === $observation ? 'selected' : '') ?>><?= $label ?></option>
+			<?php } ?>
+		</select>
+		<label for="title_observation">Titre</label>
+	</div>
+	
+	<div class="form-floating mb-3">
+	  <textarea class="form-control" placeholder="Commentaire" id="comment" name="comment" style="height: 100px"><?= $this->entity->getComment() ?></textarea>
+	  <label for="comment">Commentaire</label>
+	</div>
+	
+	<?php if ($this->isGroup === false) { ?>
+		<div class='mb-3'>
+			<div class="input-group">
+				<input class='form-control' type='file' name='photo[]' accept='image/*' id="photos" multiple>
+				
+				
+		</div>
+	<?php } ?>
+	
+	<button type="submit" class="btn btn-primary">Enregistrer</button>
+</form>
+
+<script>
+	
+	var fileInput = document.getElementById('photos');
+	if (fileInput) {
+		function usePhotoDate(){
+			var input = document.getElementById('photos');
+			console.log(input.value);
+			var tags = ExifReader.load(input.files[0]).then(function (tags) {
+				// console.log(tags);
+				var dateStr = tags.DateTimeOriginal != null ? tags.DateTimeOriginal.description : '';
+				var date = new Date(dateStr.split(' ')[0].replaceAll(':','/') + ' ' + dateStr.split(' ')[1]);
+				console.log(date);
+				document.getElementById('date').value = date.toISOString().split('T')[0];
+			});
+		};
+		fileInput.onchange = usePhotoDate;
+	}
+	
+	var typeSelect = document.getElementById("type_action");
+	function changeCb() {
+		var obervation = document.getElementById("observation_form");
+		var title = document.getElementById("title_form");
+		if (typeSelect.value === 'observation') {
+			obervation.classList.remove("d-none");
+			title.classList.add('d-none');
+		} else {
+			obervation.classList.add("d-none");
+			title.classList.remove('d-none');
+		}
+	};
+	typeSelect.onchange = changeCb;
+	changeCb();
+</script>
+
+<script src="https://github.com/mattiasw/ExifReader/releases/download/4.5.0/exif-reader.js"></script>

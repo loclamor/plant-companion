@@ -1,0 +1,54 @@
+<h1>Liste des Photos de <?= $this->vegetable->getName() ?> <a class="btn btn-outline-primary" href="?controller=photo&action=edit&vegetable=<?= $this->vegetable->getId() ?>" role="button">+</a></h1>
+
+<?php
+if (is_array($this->photos)) { ?>
+	<table  class="table">
+		<thead>
+			<tr><th></th><th></th></th><th>Nom fichier</th><th>Action</th></tr>
+		</thead>
+		<tbody>
+			<?php
+			foreach ($this->photos as $photo) { 
+			$path_parts = pathinfo($photo->getPath());
+    		$fileSize = filesize($photo->getPath());
+			?>
+				<tr>
+					<td>
+						<div class="fs-2">
+				      	<?php 
+				      	$isDefault = $photo->getId() === $this->vegetable->getDefaultPhoto()->getId();
+				      	if ($isDefault) { ?>
+				      		<i class="bi bi-bookmark-star-fill" style="color: red"></i>
+				      	<?php } else { ?>
+				      		<a href="?controller=photo&action=setdefaultphoto&vegetable=<?= $this->vegetable->getId() ?>&photo=<?= $photo->getId() ?>"><i class="bi bi-bookmark-star"></i></a>
+				      	<?php } ?>
+				      	</div>
+					</td>
+					<td>
+						<div class="w-100 text-center">
+							<img src="<?= $photo->getThumbPath('H', 115) ?>" class='rounded' height="115px"/>
+						</div>
+					</td>
+					<td>
+						<?= $path_parts['filename'] . '.' . $path_parts['extension'] ?> (<?= human_filesize($fileSize) ?>)
+					</td>
+					<td>
+						<?= isset($photo->action) ? $photo->getAction()->getTitle() . ' - ' . $photo->getAction()->getDate() : '' ?>
+					</td>
+					<td>
+						<a href="?controller=photo&action=edit&id=<?= $photo->getId() ?>" class="btn btn-outline-secondary"><i class="bi bi-pencil-square"></i></a>
+						<?php if(!$isDefault) { ?>
+							<a href="?controller=photo&action=delete&id=<?= $photo->getId() ?>&prevaction=listByVegetable" onclick="return confirm('Voulez-vous vraiment supprimer cette photo ?')" class="btn btn-outline-danger"><i class="bi bi-trash"></i></a>
+						<?php } ?>
+					</td>
+				</tr>
+			<?php
+			} ?>
+		</tbody>
+	</table>
+<?php
+}
+else { ?>
+	Pas encore de photo ! <a class="btn btn-outline-primary" href="?controller=photo&action=edit&vegetable=<?= $this->vegetable->getId() ?>" role="button">+</a>
+<?php
+} ?>

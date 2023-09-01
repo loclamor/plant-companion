@@ -1,0 +1,36 @@
+<h1>Liste des groupes <a class="btn btn-outline-primary" href="<?= PlantUrl::getEdit() ?>" role="button">+</a></h1>
+
+<?php
+if (is_array($this->groups)) { ?>
+	<table  class="table">
+		<thead>
+			<tr><th>Nom</th><th>Parent</th></tr>
+		</thead>
+		<tbody>
+			<?php
+			foreach ($this->groups as $group) { ?>
+				<tr>
+					<td>
+						<a href="<?= PlantUrl::getView($group->getId()) ?>">
+							<?= $group->getName() ?>
+						</a>
+					</td>
+					<td>
+						<?= $group->parent !== null ? $group->getParent()->getName() : '' ?>
+					</td>
+					<td>
+						<a href="<?= PlantUrl::getEdit($group->getId()) ?>" class="btn btn-outline-secondary"><i class="bi bi-pencil-square"></i></a>
+					</td>
+				</tr>
+			<?php
+			} ?>
+		</tbody>
+	</table>
+<?php
+}
+else { ?>
+	Pas encore de groupe de plante ! <a href="<?= PlantUrl::getEdit() ?>" >Créer un groupe de plante</a>
+<?php
+} ?>
+
+

@@ -1,0 +1,89 @@
+<table class="table table-bordered">
+	<tr>
+		<th></th>
+		<th>Aout</th>
+		<th>Septembre</th>
+		<th>Octobre</th>
+		<th>Novembre</th>
+		<th>Decembre</th>
+		<th>Janvier</th>
+		<th>Fevrier</th>
+		<th>Mars</th>
+		<th>Avril</th>
+		<th>Mai</th>
+		<th>Juin</th>
+		<th>Juillet</th>
+	</tr>
+	<?php
+	
+	foreach ($this->vegetables as $vegetable) { 
+		if ($vegetable->getFructiDebut()) {
+			echo '<tr>';
+			echo '<td ' . ($vegetable->getFleurDebut() ? 'rowspan="2"' : '') . '>' . $vegetable->getName() . '</td>';
+			$fructi_debut = $vegetable->getFructiDebut();
+			if ($fructi_debut < 8) {
+				$fructi_debut += 12;
+			}
+			$fructi_fin = $vegetable->getFructiFin();
+			if ($fructi_fin < $fructi_debut) {
+				$fructi_fin += 12;
+			}
+			for($i = 8; $i <= 19; $i++) {
+				if ($i < $fructi_debut) {
+					echo '<td class="month">';
+				} elseif ($i <= $fructi_fin) {
+					echo '<td class="month table-warning">';
+				} else {
+					echo '<td class="month">';
+				}
+				echo '<div class="month-container">';
+				$actionsDays = $this->getMonthActions($vegetable, $i%12, 'Fruits');
+				// var_export($actionsDays);
+				for ($d=1; $d<=31; $d++) {
+					$hasFruit = in_array($d, $actionsDays);
+					echo '<div class="day '.($hasFruit ? 'fruit': '').'"></div>';
+				}
+				echo '</div></td>';
+			}
+			echo '</tr>';
+		}
+		if ($vegetable->getFleurDebut()) {
+			echo '<tr>';
+			if (!$vegetable->getFructiDebut()) echo '<td>' . $vegetable->getName() . '</td>';
+			$fleur_debut = $vegetable->getFleurDebut();
+			if ($fleur_debut < 8) {
+				$fleur_debut += 12;
+			}
+			$fleur_fin = $vegetable->getFleurFin();
+			if ($fleur_fin < $fleur_debut) {
+				$fleur_fin += 12;
+			}
+			for($i = 8; $i <= 19; $i++) {
+				if ($i < $fleur_debut) {
+					echo '<td class="month">';
+				} elseif ($i <= $fleur_fin) {
+					echo '<td class="month table-success">';
+				} else {
+					echo '<td class="month">';
+				}
+				echo '<div class="month-container">';
+				$actionsDays = $this->getMonthActions($vegetable, $i%12, 'Fleurs');
+				// var_export($actionsDays);
+				for ($d=1; $d<=31; $d++) {
+					$hasFleur = in_array($d, $actionsDays);
+					echo '<div class="day '.($hasFleur ? 'fleur': '').'"></div>';
+				}
+				echo '</div></td>';
+			}
+			echo '</tr>';
+		}
+	}	
+	?>
+	
+</table>
+<style>
+	.container:has(#calendar-fructification) {
+		margin: 0;
+	}
+	}
+</style>

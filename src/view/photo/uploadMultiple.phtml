@@ -1,0 +1,41 @@
+<script>
+	function getVegetableSelectString(id) {
+	  return '<div class="form-floating mb-3"><select class="form-select" id="vegetable_' + id + '" name="vegetable" required>' +
+			<?php foreach ($this->vegetables as $vegetable) { ?>
+				 '<option value="<?= $vegetable->getId() ?>" ><?= addslashes($vegetable->getName()) ?></option>' +
+			<?php } ?>
+		'</select><label for="vegetable_' + id + '" ></label></div>';
+	}
+	
+	function getTypeActionSelectString(id) {
+		return '<div class="form-floating mb-3"><select class="form-select" id="type_action_' + id + '" name="type_action_' + id + '" required hash="' + id + '">' +
+					'<option value="SANS_ACTION">Sans action</option>' +
+				<?php foreach ($this->action->TYPES_ACTION as $type => $label) { ?>
+					'<option value="<?= $type ?>"><?= addslashes($label) ?></option>' +
+				<?php } ?>
+			'</select><label for="type_action_' + id + '">Type</label></div>';
+	}
+	
+	function getObservationSelectString(id) {
+		return '<div class="form-floating mb-3" id="observation_form_' + id + '"><select class="form-select" id="title_observation_' + id + '" name="observation_' + id + '">' +
+			<?php foreach ($this->action->TITLE_OBSERVATION as $observation => $label) { ?>
+				'<option value="<?= $observation ?>"><?= addslashes($label) ?></option>' +
+			<?php } ?>
+		'</select><label for="title_observation_' + id + '">Titre</label></div>';
+	}
+</script>
+
+<link href="./css/upload.css" rel="stylesheet">
+<div id="drop-area">
+  <form class="my-form">
+    <p>Ajouter des photos<p>
+    <input type="file" id="fileElem" multiple accept="image/*" onchange="handleFiles(this.files)">
+    <label class="btn btn-primary" for="fileElem">Photos...</label>
+  </form>
+</div>
+
+<form id="gallery" class="row row-cols-1 row-cols-md-2 g-4 was-validated" action="?controller=photo&action=multipleAdd" method="POST"></form>
+<button type="button" class="btn btn-primary float-end d-none" id="submitBtn" >Créer les actions</button>
+
+<script src="./js/upload.js"></script>
+<script src="https://github.com/mattiasw/ExifReader/releases/download/4.5.0/exif-reader.js"></script>

@@ -1,0 +1,34 @@
+<h1>Liste des lieux <a class="btn btn-outline-primary" href="<?= PlantUrl::getEdit() ?>" role="button">+</a></h1>
+
+<?php
+if (is_array($this->entities)) { ?>
+	<table  class="table">
+		<thead>
+			<tr><th>Nom</th></tr>
+		</thead>
+		<tbody>
+			<?php
+			foreach ($this->entities as $entity) { ?>
+				<tr>
+					<td>
+						<a href="<?= PlantUrl::getView($entity->getId()) ?>">
+							<?= $entity->getName() ?>
+						</a>
+					</td>
+					
+					<td>
+						<a href="<?= PlantUrl::getEdit($entity->getId()) ?>" class="btn btn-outline-secondary"><i class="bi bi-pencil-square"></i></a>
+					</td>
+				</tr>
+			<?php
+			} ?>
+		</tbody>
+	</table>
+<?php
+}
+else { ?>
+	Pas encore de lieu ! <a href="<?= PlantUrl::getEdit() ?>" >Créer un lieu</a>
+<?php
+} ?>
+
+

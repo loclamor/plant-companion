@@ -1,0 +1,17 @@
+coucou :)
+
+ajouter : 
+
+<ul>
+<li>Fusion de plantes (anti doublon)</li>
+<li>affecter facilement plusieurs plantes à un groupe (zone/lieu)</li>
+</ul>
+
+<?php 
+echo PlantUrl::getApply(12) . '<br/>';
+echo PlantUrl::getApply(null) . '<br/>';
+echo PlantUrl::get('vegetable', 'list', ['k1' => 'v1', 'k2' => 'v2']) . '<br/>';
+echo $_SESSION['referrer'] ?? 'no_referrer';
+?>
+
+<input type="text" id="UserAgent">

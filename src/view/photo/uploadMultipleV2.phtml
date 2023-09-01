@@ -1,0 +1,60 @@
+<script>
+	function getVegetableJSON() {
+		return {
+			<?php foreach ($this->vegetables as $vegetable) { ?>
+				 '<?= $vegetable->getId() ?>': '<?= addslashes($vegetable->getName()) ?>',
+			<?php } ?>
+		};
+	}
+	
+	function getTypeActionJSON(id) {
+		return {
+				'SANS_ACTION' : 'Sans action',
+				<?php foreach ($this->action->TYPES_ACTION as $type => $label) { ?>
+					'<?= $type ?>' : '<?= addslashes($label) ?>',
+				<?php } ?>
+			};
+	}
+	
+	function getObservationJSON(id) {
+		return  {
+			<?php foreach ($this->action->TITLE_OBSERVATION as $observation => $label) { ?>
+				'<?= $observation ?>' : '<?= addslashes($label) ?>',
+			<?php } ?>
+		};
+	}
+	
+	function getTypeActionSelectString() {
+		return '<select id="type_action" required style="width: 256px">' +
+					'<option value="SANS_ACTION">Sans action</option>' +
+				<?php foreach ($this->action->TYPES_ACTION as $type => $label) { ?>
+					'<option value="<?= $type ?>"><?= addslashes($label) ?></option>' +
+				<?php } ?>
+			'</select>';
+	}
+	
+	function getObservationSelectString() {
+		return '<select id="title_observation" style="width: 256px">' +
+			<?php foreach ($this->action->TITLE_OBSERVATION as $observation => $label) { ?>
+				'<option value="<?= $observation ?>"><?= addslashes($label) ?></option>' +
+			<?php } ?>
+		'</select>';
+	}
+</script>
+
+<link href="./css/upload.css" rel="stylesheet">
+
+
+
+
+<div id="gallery" class=""></div>
+
+
+<button type="button" class="btn btn-primary float-end d-none" id="submitBtn" >Créer les actions</button>
+
+<script src="./js/autocomplete.js"></script>
+<script src="./js/uploader.js"></script>
+<script src="./js/photoViewer.js"></script>
+<script src="./js/photoView.js"></script>
+<script src="./js/uploadV2.js"></script>
+<script src="https://github.com/mattiasw/ExifReader/releases/download/4.5.0/exif-reader.js"></script>

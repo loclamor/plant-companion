@@ -1,0 +1,47 @@
+<form action="?controller=print&action=bytype" method="POST" class="form-floating mb-3 input-group d-print-none">
+	<select name="type" class="form-control" id="name">
+		<?php foreach ($this->types as $type) { ?>
+			<option value="<?= $type->getId() ?>" <?= $this->type == $type->getId() ? 'selected' : '' ?> ><?= $type->getName() ?></option>
+		<?php } ?>
+	</select>
+	<label for="name">Type de plante</label>
+	<input type="submit" value="Valider" class="btn btn-outline-secondary"/>
+</form>
+
+<div class="container">
+<div class="row" style="width: 21cm">
+<?php 
+$mois = ['Choisir...', 'Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre'];
+$i = 0;
+foreach ($this->entities as $entity) { 
+$i++;
+?>
+	<div class="col" style="padding-bottom: 26px;">
+		<div class="card" style="width: 9.5cm; overflow: hidden; height: 138px;">
+			<div class="card-body">
+				<h5 class="card-title"><?= $entity->getName() ?></h5>
+				<h6 class="card-subtitle mb-2 text-muted"><?= $entity->porte_greffe !== null ? $entity->getPorteGreffe()->getName() : '' ?> <span class="float-end"><?= $entity->getRusticite() ?></span></h6>
+				<p class="card-text">
+					<i class="bi bi-flower1"></i>
+					<?php if ($entity->mois_fleur_debut > 0 && $entity->mois_fleur_fin > 0) { ?>
+						 <?= $mois[$entity->getMoisFleurDebut()] ?> - <?= $mois[$entity->getMoisFleurFin()] ?>
+					<?php } else { ?>
+						<?= $entity->getPFleur() ?>
+					<?php } ?>
+					<br/>
+					<i class="bi bi-basket"></i>
+					<?php if ($entity->mois_fructi_debut > 0 && $entity->mois_fructi_fin > 0) { ?>
+						 <?= $mois[$entity->getMoisFructiDebut()] ?> - <?= $mois[$entity->getMoisFructiFin()] ?>
+					<?php } else { ?>
+						<?= $entity->getPFructi() ?>
+					<?php } ?>
+				</p>
+			</div>
+		</div>
+	</div>
+	<?php if($i % 14 === 0) { ?>
+		<hr style="page-break-after: always;" />
+	<?php } ?>
+<?php } ?>
+</div>
+</div>

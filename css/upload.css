@@ -1,0 +1,108 @@
+#drop-area {
+  border: 2px dashed var(--main-primary);
+  border-radius: 20px;
+  width: 80%;
+  height: 90%;
+  font-family: sans-serif;
+  margin: 25px auto;
+  padding: 20px;
+  margin-bottom: 50px;
+}
+#drop-area.highlight {
+  border-color: var(--main-primary-darker);
+}
+p {
+  margin-top: 0;
+}
+.my-form {
+	text-align: center;
+  margin-bottom: 10px;
+}
+#gallery {
+  margin-top: 10px;
+}
+#gallery img {
+
+}
+.button {
+  display: inline-block;
+  padding: 10px;
+  background: #ccc;
+  cursor: pointer;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+.button:hover {
+  background: #ddd;
+}
+#fileElem {
+  display: none;
+}
+
+#viewer .carousel-indicators {
+	bottom: -16px;
+}
+
+#viewer .carousel-indicators button {
+    width: 40px;
+    height: 50px;
+    overflow: hidden;
+    text-indent: 0;
+    border-top: 0px solid transparent;
+    border-bottom: 0px solid transparent;
+    position: relative;
+}
+
+#add-indicator.btn-outline-primary {
+    font-weight: bolder;
+    font-size: 35px;
+}
+
+#add-indicator.btn-outline-primary.active {
+    color: #fff;
+    background-color: var(--main-primary-darker);
+    border-color: var(--main-primary-darker);
+}
+
+#pictureFromCamera {
+	display: none;
+}
+
+#pictureFromCamera {
+  width: 100%;
+  height: auto;
+  margin-top: 16px;
+}
+
+#viewer .carousel-inner {
+	height: calc(100vh - 170px);
+} 
+
+#viewer .carousel-item {
+	height: 100%;
+}
+
+#viewer .carousel-item #remove {
+	z-index: 99;
+    margin: 10px;
+    font-size: x-large;
+}
+
+.upload-progress {
+	display: block;
+    position: absolute;
+    background-color: rgb(1 1 1 / 50%);
+    height: 100%;
+}
+    
+.upload-progress.success {
+	background-color: rgb(0 105 0 / 50%);
+}
+
+.upload-progress.error {
+	background-color: rgb(105 0 0 / 50%);
+}
+
+.upload-progress.abort {
+	background-color: rgb(240 130 0 / 50%);
+}

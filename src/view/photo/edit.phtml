@@ -1,0 +1,41 @@
+<h1><?= isset($this->entity->id) ? 'Modifier' : 'Ajouter' ?> une photo <?= isset($this->entity->vegetable) ? 'sur ' . $this->entity->getVegetable()->getName() : '' ?></h1>
+
+<form action="<?= PlantUrl::getApply($this->entity->getId()) ?>" method="POST" enctype="multipart/form-data" class="was-validated">
+	
+	<div class="form-floating mb-3">
+		<select class="form-select <?= isset($this->entity->vegetable) ? 'disabled' : '' ?>" id="vegetable" name="vegetable" required >
+			<?php
+				foreach ($this->vegetables as $vegetable) {
+					echo '<option value="' . $vegetable->getId() . '" ' . ($this->entity->vegetable === $vegetable->getId() ? 'selected' : '') . '>' . $vegetable->getName() . '</option>';
+				}
+			?>
+		</select>
+		<label for="vegetable">Plante</label>
+	</div>
+	
+	<div class="form-floating mb-3">
+		<select class="form-select" id="action" name="action">
+			<option value="">Sans action</option>
+			<?php
+				foreach ($this->actions as $action) {
+					echo '<option value="' . $action->getId() . '" ' . ($this->entity->action === $action->getId() ? 'selected' : '') . '>' . $action->getTitle() . ' - ' . $action->getDate() . '</option>';
+				}
+			?>
+		</select>
+		<label for="vegetable">Action</label>
+	</div>
+	<?php if (!empty($this->entity->getPath())) { ?>
+	<div class='mb-3'>
+		<label>Photo actuelle</label>
+		<div class="text-center form-control" style="height: 300px;">
+			<img src="<?= $this->entity->getThumbPath('H', 286) ?>"  class='rounded h-100'/>
+		</div>
+	</div>
+	<?php } ?>
+	<div class='mb-3'>
+		<label for="photo"><?= !empty($this->entity->getPath()) ? 'Modifier la photo' : 'Photo' ?></label>
+		<input class='form-control' type='file' name='photo' id="photo" accept='image/*'>
+			
+	</div>
+	<button type="submit" class="btn btn-primary">Enregistrer</button>
+</form>

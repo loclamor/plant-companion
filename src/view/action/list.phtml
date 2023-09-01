@@ -1,0 +1,56 @@
+<h1>Liste des actions  <a class="btn btn-outline-primary" href="<?= PlantUrl::getEdit() ?>" role="button">+</a></h1>
+
+<?php
+if (is_array($this->entities)) { ?>
+	<table  class="table">
+		<thead>
+			<tr><th></th></th><th>Plante</th><th>Date</th><th>Type</th><th>Commentaire</th></tr>
+		</thead>
+		<tbody>
+			<?php
+			foreach ($this->entities as $action) { ?>
+				<tr>
+					<td>
+						<div class="w-100 text-center position-relative">
+						<?php
+							$photos = $this->getPhotos($action->getId());
+							if (is_array($photos)) {
+								?>
+								<img src="<?= $photos[0]->getThumbPath('H', 115) ?>" class="rounded" height="115px"/>
+								<?php if (count($photos) > 1) { ?>
+									<span class="position-absolute bottom-0 start-50 translate-middle badge rounded-pill bg-secondary">+ <?= (count($photos) - 1) ?></span>
+								<?php } ?>
+							<?php } else { ?>
+								<img src="./plante.png" class="rounded" height="115px"/>
+							<?php } ?>
+						</div>
+					</td>
+					<td>
+						<a href="<?= PlantUrl::getView($action->getId()) ?>">
+							<?= $action->getVegetable()->getName() ?>
+						</a>
+					</td>
+					<td>
+						<?= $action->getDate() ?>
+					</td>
+					<td>
+						<?= $action->getTypeAction() ?>
+					</td>
+					<td>
+						<h3><?= $action->getTitle();?></h3>
+						<?= $action->getComment() ?>
+					</td>
+					<td>
+						<a href="<?= PlantUrl::getEdit($action->getId()) ?>" class="btn btn-outline-secondary"><i class="bi bi-pencil-square"></i></a>
+					</td>
+				</tr>
+			<?php
+			} ?>
+		</tbody>
+	</table>
+<?php
+}
+else { ?>
+	Pas encore d'action ! <a href="<?= PlantUrl::getEdit() ?>" >Créer une action</a>
+<?php
+} ?>

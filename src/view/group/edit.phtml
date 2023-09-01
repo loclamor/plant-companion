@@ -1,0 +1,21 @@
+<h1><?= isset($this->entity->id) ? 'Modifier' : 'Créer' ?> un groupe</h1>
+
+<form action="<?= PlantUrl::getApply($this->entity->getId()) ?>" method="POST" class="was-validated ">
+	
+	<div class="form-floating mb-3">
+		<input type="text" class="form-control" id="name" name="name" placeholder="Nom" value="<?= $this->entity->getName() ?>" required>
+		<label for="name">Nom</label>
+	</div>
+	<div class="form-floating mb-3">
+		<select class="form-select" id="group" name="parent">
+			<option value="">Sans parent</option>
+			<?php
+				foreach ($this->$groups as $group) {
+					echo '<option value="' . $group->getId() . ' ' . ($this->entity->parent === $group->getId() ? 'selected' : '') . '">' . $group->getName() . '</option>';
+				}
+			?>
+		</select>
+		<label for="group">Groupe parent</label>
+	</div>
+	<button type="submit" class="btn btn-primary">Enregistrer</button>
+</form>

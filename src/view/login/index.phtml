@@ -1,0 +1,15 @@
+<h2>Se connecter</h2>
+<form class="position-relative" method="POST" action="<?= PlantUrl::get('login', 'submitlogin') ?>">
+	<div class="position-absolute top-50 start-50 translate-middle"></div>
+		<div class="form-floating mb-3">
+		  <input type="text" class="form-control" id="login" name="login" placeholder="Identifiant...">
+		  <label for="login">Identifiant</label>
+		</div>
+		<div class="form-floating">
+		  <input type="password" class="form-control" id="password" name="password" placeholder="Mot de passe ...">
+		  <label for="password">Mot de passe</label>
+		</div>
+		<a class="float-end" href="<?= PlantUrl::get('login', 'create') ?>">Pas encore de compte ? Créer un compte</a><br/>
+		<button class="btn btn-primary" type="submit">Se connecter</button>
+	</div>
+</form>

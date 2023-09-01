@@ -1,0 +1,60 @@
+<h1><?= $this->entity->getVegetable()->getName() ?></h1>
+<dl class="row">
+  <dt class="col-sm-3">Plante</dt>
+  <dd class="col-sm-9"><?= $this->entity->getVegetable()->getName() ?></dd>
+  
+  <dt class="col-sm-3">Date</dt>
+  <dd class="col-sm-9"><?= $this->entity->getDate() ?></dd>
+  
+  <dt class="col-sm-3">Type</dt>
+  <dd class="col-sm-9"><?= $this->entity->getTypeAction() ?></dd>
+  
+  <dt class="col-sm-3">Titre</dt>
+  <dd class="col-sm-9"><?= $this->entity->getTitle() ?></dd>
+
+  <dt class="col-sm-3">Commentaire</dt>
+  <dd class="col-sm-9"><?= $this->entity->getComment() ?></dd>
+
+</dl>
+
+<h2>Photos</h2>
+
+<?php 
+$photos = $this->getPhotos($this->entity->getId());
+if( !is_array($photos)) { ?>
+Pas encore de photo !
+<?php } else { ?>
+
+
+<div id="carouselCaptions" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-indicators">
+  	<?php for($i = 0; $i < count($photos); $i++) { ?>
+    	<button type="button" data-bs-target="#carouselCaptions" data-bs-slide-to="<?= $i ?>" class="<?= $i === 0 ? 'active' : '' ?>" aria-current="true" aria-label="Slide 1"></button>
+    <?php } ?>
+  </div>
+  <div class="carousel-inner">
+  	<?php for($i = 0; $i < count($photos); $i++) { ?>
+    <div class="carousel-item <?= $i === 0 ? 'active' : '' ?>">
+      <div class="d-block w-100 position-relative" style="height: 500px;">
+        <img src="<?= $photos[$i]->getThumbPath('H', 500) ?>" height="500px" class="position-absolute top-50 start-50 translate-middle" alt="...">
+      </div>
+      <?php if (isset($photos[$i]->action)) { ?>
+	      <div class="carousel-caption d-none d-md-block">
+	        <h5><?= $photos[$i]->getAction()->getTypeAction() . ' ' . $photos[$i]->getAction()->getTitle() ?></h5>
+	        <p><?= $photos[$i]->getAction()->getComment() ?></p>
+	      </div>
+       <?php } ?>
+    </div>
+    <?php } ?>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselCaptions" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselCaptions" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+<?php } ?>
