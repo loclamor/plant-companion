@@ -6,10 +6,10 @@ class Controller_Calendar extends Controller_Base {
 		if (isset($_SESSION['selectedBaseListGroup'])) {
 			$join = "INNER JOIN `" . TABLE_PREFIX . "group` gr ON te.group_id = gr.id AND (gr.id = " . $_SESSION['selectedBaseListGroup'] . " OR gr.parent_id = " . $_SESSION['selectedBaseListGroup'] . ")";
 		}
-		$this->vegetables = Gestionnaire::getGestionnaire('Vegetable')->getOf(['utilisateur' => $_SESSION['utiliateur_id']], 'name', false, 0, 0, $join);
+		$this->vegetables = Gestionnaire::getGestionnaire(Model_Vegetable::class)->getOf(['utilisateur' => $_SESSION['utilisateur_id']], 'name', false, 0, 0, $join);
 	}
 	
-	protected function getMonthActions($vegetable, $month, $type) {
+	protected function getMonthActions(Model_Vegetable $vegetable, $month, $type) {
 		$sqlStr = "SELECT DAY(`date`) as day FROM ".TABLE_PREFIX."action WHERE vegetable_id = {{vegetable_id}} AND type_action = 'observation' AND title = '{{type}}' AND MONTH(`date`) = {{month}} group by day order by day asc";
 		$params = [
 			'vegetable_id' => $vegetable->getId(),

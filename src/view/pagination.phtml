@@ -1,0 +1,34 @@
+<?php
+$nbPages = (int)ceil($this->nb_entities / $this->length);
+?>
+<div class="pagination-container">
+    <nav aria-label="Pagination">
+        <ul class="pagination">
+            <li class="page-item <?= $this->page === 1 ? 'disabled' : '' ?>">
+                <a class="page-link" href="<?= PlantUrl::getList(['p' => $this->page - 1, 'l' => $this->length]) ?>" aria-label="Pr&eacute;cedent" >
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <?php for ($p = 1; $p <= $nbPages; $p++) { ?>
+                <li class="page-item <?= $p === $this->page ? 'disabled' : '' ?>">
+                    <a class="page-link" href="<?= PlantUrl::getList(['p' => $p, 'l' => $this->length]) ?>"><?= $p ?></a>
+                </li>
+            <?php } ?>
+            <li class="page-item <?= $nbPages === $this->page ? 'disabled' : '' ?>">
+                <a class="page-link" href="<?= PlantUrl::getList(['p' => $this->page + 1, 'l' => $this->length]) ?>" aria-label="Suivant">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+            Items par pages : <?= $this->length ?>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li><a class="dropdown-item" href="<?= PlantUrl::getList(['p' => 1, 'l' => 10]) ?>">10</a></li>
+            <li><a class="dropdown-item" href="<?= PlantUrl::getList(['p' => 1, 'l' => 25]) ?>">25</a></li>
+            <li><a class="dropdown-item" href="<?= PlantUrl::getList(['p' => 1, 'l' => 50]) ?>">50</a></li>
+        </ul>
+    </div>
+</div>

@@ -46,7 +46,7 @@ class Model_Group extends Model_PrivateEntite {
     
     public function getParent() {
     	if($this->parentObj === null) {
-    		$this->parentObj =  Gestionnaire::getGestionnaire('Group')->getOne($this->parent);
+    		$this->parentObj =  Gestionnaire::getGestionnaire(__CLASS__)->getOne($this->parent);
     	}
     	return $this->parentObj;
     }

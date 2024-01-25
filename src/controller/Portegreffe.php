@@ -2,23 +2,23 @@
 class Controller_Portegreffe extends Controller_Base {
 	
 	public function list() {
-		$this->entities = Gestionnaire::getGestionnaire('Portegreffe')->getOf(['utilisateur' => $_SESSION['utiliateur_id']]);
+		$this->entities = Gestionnaire::getGestionnaire(Model_Portegreffe::class)->getOf(['utilisateur' => $_SESSION['utilisateur_id']]);
 	}
 	
 	public function edit() {
 		$this->entity = new Model_Portegreffe();
-		if (isset($_GET['id']) && intval($_GET['id']) > 0) {
-			$this->entity = new Model_Portegreffe(intval($_GET['id']));
+		if (isset($_GET['id']) && (int)$_GET['id'] > 0) {
+			$this->entity = new Model_Portegreffe((int)$_GET['id']);
 		}
-		$this->types = Gestionnaire::getGestionnaire('Type')->getOf(['utilisateur' => $_SESSION['utiliateur_id']]);
+		$this->types = Gestionnaire::getGestionnaire(Model_Type::class)->getOf(['utilisateur' => $_SESSION['utilisateur_id']]);
 	}
 	
 	public function apply() {
 		// treat null values
 	    $post = array_map(function($value) {return $value === '' ? null : $value; }, $_POST);
 		$entity = new Model_Portegreffe();
-		if (isset($_GET['id']) && intval($_GET['id']) > 0) {
-			$entity = new Model_Portegreffe(intval($_GET['id']));
+		if (isset($_GET['id']) && (int)$_GET['id'] > 0) {
+			$entity = new Model_Portegreffe((int)$_GET['id']);
 		}
 		$entity->hydrater($post);
 		$entity->enregistrer();
@@ -29,8 +29,8 @@ class Controller_Portegreffe extends Controller_Base {
 	
 	public function view() {
 		$this->entity = new Model_Portegreffe();
-		if (isset($_GET['id']) && intval($_GET['id']) > 0) {
-			$this->entity = new Model_Portegreffe(intval($_GET['id']));
+		if (isset($_GET['id']) && (int)$_GET['id'] > 0) {
+			$this->entity = new Model_Portegreffe((int)$_GET['id']);
 		}
 	}
 }

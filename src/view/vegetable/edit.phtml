@@ -1,4 +1,4 @@
-<h1><?= isset($this->entity->id) ? 'Modifier' : 'Créer' ?> une plante</h1>
+<h1><?= isset($this->entity->id) ? 'Modifier' : 'Cr&eacute;er' ?> une plante</h1>
 
 <form action="<?= PlantUrl::getApply($this->entity->getId()) ?>" method="POST" class="was-validated">
 	
@@ -39,13 +39,13 @@
 	</div>
 	
 	<div class="form-floating mb-3">
-		<input type="number" class="form-control" id="rusticite" name="rusticite" placeholder="Rusticité" value="<?= $this->entity->getRusticite() ?>">
-		<label for="name">Rusticité</label>
+		<input type="number" class="form-control" id="rusticite" name="rusticite" placeholder="Rusticit&eacute;" value="<?= $this->entity->getRusticite() ?>">
+		<label for="name">Rusticit&eacute;</label>
 	</div>
 	
 	<?php $mois = ['Choisir...', 'Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre']; ?>
 	<div class="input-group mb-3">
-		<label class="input-group-text" for="mois_fleur_debut">Début floraison</label>
+		<label class="input-group-text" for="mois_fleur_debut">D&eacute;but floraison</label>
 		<select class="form-select" id="mois_fleur_debut" name="mois_fleur_debut">
 			<?php
 				foreach ($mois as $num => $label) {
@@ -62,7 +62,7 @@
 			?>
 		</select>
 		<select class="form-select" id="p_fleur" name="p_fleur">
-			<option value="">Ou choisir une période</option>
+			<option value="">Ou choisir une p&eacute;riode</option>
 			<?php
 				foreach ($this->entity->PERIODES as $periode) {
 					echo '<option value="' . $periode . '" ' . ($this->entity->getPFleur() == $periode ? 'selected' : '') . '>' . $periode . '</option>';
@@ -71,7 +71,7 @@
 		</select>
 	</div>
 	<div class="input-group mb-3">
-		<label class="input-group-text" for="mois_fructi_debut">Début récolte</label>
+		<label class="input-group-text" for="mois_fructi_debut">D&eacute;but r&eacute;colte</label>
 		<select class="form-select" id="mois_fructi_debut" name="mois_fructi_debut">
 			<?php
 				foreach ($mois as $num => $label) {
@@ -79,7 +79,7 @@
 				}
 			?>
 		</select>
-		<label class="input-group-text" for="mois_fructi_fin">Fin récolte</label>
+		<label class="input-group-text" for="mois_fructi_fin">Fin r&eacute;colte</label>
 		<select class="form-select" id="mois_fructi_fin" name="mois_fructi_fin">
 			<?php
 				foreach ($mois as $num => $label) {
@@ -88,7 +88,7 @@
 			?>
 		</select>
 		<select class="form-select" id="p_fruit" name="p_fructi">
-			<option value="">Ou choisir une période</option>
+			<option value="">Ou choisir une p&eacute;riode</option>
 			<?php
 				foreach ($this->entity->PERIODES as $periode) {
 					echo '<option value="' . $periode . '" ' . ($this->entity->getPFructi() == $periode ? 'selected' : '') . '>' . $periode . '</option>';
@@ -117,7 +117,8 @@
 			<option value="">Sans groupe</option>
 			<?php
 				foreach ($this->groups as $group) {
-					echo '<option value="' . $group->getId() . '" ' . ($this->entity->group === $group->getId() || empty($this->entity->group) && $_SESSION['selectedBaseListGroup'] === $group->getId() ? 'selected' : '') . '>' . $group->getName() . '</option>';
+					echo '<option value="' . $group->getId() . '" ' . ($this->entity->group === $group->getId() || (empty($this->entity->group) && $_SESSION['selectedBaseListGroup'] === $group->getId(
+                            )) ? 'selected' : '') . '>' . $group->getName() . '</option>';
 				}
 			?>
 		</select>

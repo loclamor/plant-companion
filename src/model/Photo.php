@@ -47,7 +47,7 @@ class Model_Photo extends Model_PrivateEntite {
     
     public function getVegetable() {
     	if($this->vegetableObj === null) {
-    		$this->vegetableObj =  Gestionnaire::getGestionnaire('Vegetable')->getOne($this->vegetable);
+    		$this->vegetableObj =  Gestionnaire::getGestionnaire(Model_Vegetable::class)->getOne($this->vegetable);
     	}
     	return $this->vegetableObj;
     }
@@ -57,7 +57,7 @@ class Model_Photo extends Model_PrivateEntite {
     
     public function getAction() {
     	if($this->actionObj === null) {
-    		$this->actionObj =  Gestionnaire::getGestionnaire('Action')->getOne($this->action);
+    		$this->actionObj =  Gestionnaire::getGestionnaire(Model_Action::class)->getOne($this->action);
     	}
     	return $this->actionObj;
     }
@@ -66,11 +66,14 @@ class Model_Photo extends Model_PrivateEntite {
     }
     
     static function manageUpload($tmpFile, $originalName) {
-    	$uiniq = uniqid('', true);
+        $uniq = uniqid('', true);
     	$uploaddir = './uploads/' . substr($uniq, 0, 2) . '/';
-		mkdir($uploaddir, 0777, true);
-		$uploadfile = $uploaddir . $uiniq . '.' . array_pop(explode('.', $originalName));
-		move_uploaded_file($tmp_path, $uploadfile);
+        if (!mkdir($uploaddir, 0777, true) && !is_dir($uploaddir)) {
+            throw new \RuntimeException(sprintf('Directory "%s" was not created', $uploaddir));
+        }
+        $array = explode('.', $originalName);
+        $uploadfile = $uploaddir . $uniq . '.' . array_pop($array);
+		move_uploaded_file($tmpFile, $uploadfile);
 		return $uploadfile;
     }
     
@@ -84,8 +87,7 @@ class Model_Photo extends Model_PrivateEntite {
     	if(!file_exists($minUrl) && $generate) {
 			return redimJPEG($filePath, $size, $type, $minUrl);
 		}
-		else {
-			return $minUrl;
-		}
+
+        return $minUrl;
     }
 }

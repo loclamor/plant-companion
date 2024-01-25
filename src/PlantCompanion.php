@@ -4,8 +4,8 @@ class PlantCompanion extends Site {
 	
 	
 	protected function loadCurrentUser() {
-		if ($this->controller !== 'login' && !isset($_SESSION['utiliateur_id'])) {
-		//	$_SESSION['utiliateur_id'] = 0;
+		if ($this->controller !== 'login' && !isset($_SESSION['utilisateur_id'])) {
+		//	$_SESSION['utilisateur_id'] = 0;
 		//	return;
 			$this->controller = 'login';
 			$this->action = 'index';
@@ -17,7 +17,7 @@ class PlantCompanion extends Site {
 	 * @return false if no current user, or the user object if there is one.
 	 **/
 	public function getCurrentUser() {
-		return $_SESSION['utiliateur_id'] ?? false;
+		return $_SESSION['utilisateur_id'] ?? false;
 	}
 	
 }

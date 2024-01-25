@@ -7,7 +7,7 @@ class Model_PrivateEntite extends Entite {
 	
 	public function enregistrer($toUpdate = null) {
 		
-		$this->utilisateur = $_SESSION['utiliateur_id'];
+		$this->utilisateur = $_SESSION['utilisateur_id'];
 		
 		parent::enregistrer($toUpdate = null);
 		

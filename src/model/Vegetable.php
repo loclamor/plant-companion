@@ -86,7 +86,7 @@ class Model_Vegetable extends Model_PrivateEntite {
     	
     public $PERIODES = array(
     		'Printemps',
-    		'Eté',
+    		'Ete',
     		'Automne',
     		'Hivers',
     		'4 Saisons',
@@ -94,7 +94,7 @@ class Model_Vegetable extends Model_PrivateEntite {
     	);
 	public $PERIODES_MOIS = array( // arrays [mois_debut, mois_fin]
 		'Printemps' => [3, 5],
-		'Eté' => [6, 8],
+		'Ete' => [6, 8],
 		'Automne' => [9, 11],
 		'Hivers' => [12, 2],
 		'4 Saisons' => [8, 7],
@@ -135,7 +135,7 @@ class Model_Vegetable extends Model_PrivateEntite {
     
     public function getType() {
     	if($this->typeObj === null) {
-    		$this->typeObj =  Gestionnaire::getGestionnaire('Type')->getOne($this->type);
+    		$this->typeObj =  Gestionnaire::getGestionnaire(Model_Type::class)->getOne($this->type);
     	}
     	return $this->typeObj;
     }
@@ -145,7 +145,7 @@ class Model_Vegetable extends Model_PrivateEntite {
     
     public function getGroup() {
     	if($this->groupObj === null) {
-    		$this->groupObj =  Gestionnaire::getGestionnaire('Group')->getOne($this->group);
+    		$this->groupObj =  Gestionnaire::getGestionnaire(Model_Group::class)->getOne($this->group);
     	}
     	return $this->groupObj;
     }
@@ -155,7 +155,7 @@ class Model_Vegetable extends Model_PrivateEntite {
     
     public function getParent() {
     	if($this->parentObj === null) {
-    		$this->parentObj =  Gestionnaire::getGestionnaire('Vegetable')->getOne($this->parent);
+    		$this->parentObj =  Gestionnaire::getGestionnaire(__CLASS__)->getOne($this->parent);
     	}
     	return $this->parentObj;
     }
@@ -172,7 +172,7 @@ class Model_Vegetable extends Model_PrivateEntite {
     
     public function getPorteGreffe() {
     	if($this->porte_greffeObj === null) {
-    		$this->porte_greffeObj =  Gestionnaire::getGestionnaire('Portegreffe')->getOne($this->porte_greffe);
+    		$this->porte_greffeObj =  Gestionnaire::getGestionnaire(Model_Portegreffe::class)->getOne($this->porte_greffe);
     	}
     	return $this->porte_greffeObj;
     }
@@ -182,7 +182,7 @@ class Model_Vegetable extends Model_PrivateEntite {
     
     public function getLieuOrigine() {
     	if($this->lieu_origineObj === null) {
-    		$this->lieu_origineObj =  Gestionnaire::getGestionnaire('Lieu')->getOne($this->lieu_origine);
+    		$this->lieu_origineObj =  Gestionnaire::getGestionnaire(Model_Lieu::class)->getOne($this->lieu_origine);
     	}
     	return $this->lieu_origineObj;
     }
@@ -215,7 +215,7 @@ class Model_Vegetable extends Model_PrivateEntite {
     	return $this->mois_fleur_fin;
     }
     public function setMoisFleurFin( $mois_fleur_fin ) {
-    	$this->mois_fleur_fin = $moi_fleur_fin;
+    	$this->mois_fleur_fin = $mois_fleur_fin;
     }
     
     public function getMoisFructiDebut() {
@@ -229,7 +229,7 @@ class Model_Vegetable extends Model_PrivateEntite {
     	return $this->mois_fructi_fin;
     }
     public function setMoisFructiFin( $mois_fructi_fin ) {
-    	$this->mois_fructi_fin = $moi_fructi_fin;
+    	$this->mois_fructi_fin = $mois_fructi_fin;
     }
     
     public function getPFleur() {
@@ -288,9 +288,9 @@ class Model_Vegetable extends Model_PrivateEntite {
     
     public function getDefaultPhoto() {
     	if($this->default_photoObj === null) {
-    		$photo = Gestionnaire::getGestionnaire('Photo')->getOne($this->default_photo);
+    		$photo = Gestionnaire::getGestionnaire(Model_Photo::class)->getOne($this->default_photo);
     		if ($photo->getId() === null) {
-    			$photos = Gestionnaire::getGestionnaire('Photo')->getOf(['vegetable' => $this->getId()]);
+    			$photos = Gestionnaire::getGestionnaire(Model_Photo::class)->getOf(['vegetable' => $this->getId()]);
     			if (is_array($photos) && count($photos) > 0) {
     				$photo = $photos[0];
     			}
@@ -308,6 +308,6 @@ class Model_Vegetable extends Model_PrivateEntite {
     
         
     public function getActions() {
-    	return Gestionnaire::getGestionnaire('Action')->getOf(['vegetable' => $this->getId()], 'date', true);
+    	return Gestionnaire::getGestionnaire(Model_Action::class)->getOf(['vegetable' => $this->getId()], 'date', true);
     }
 }

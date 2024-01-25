@@ -43,7 +43,7 @@ class Model_Type extends Model_PrivateEntite {
     
     public function getParent() {
     	if($this->parentObj === null) {
-    		$this->parentObj =  Gestionnaire::getGestionnaire('Type')->getOne($this->parent);
+    		$this->parentObj =  Gestionnaire::getGestionnaire(__CLASS__)->getOne($this->parent);
     	}
     	return $this->parentObj;
     }

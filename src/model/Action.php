@@ -67,7 +67,7 @@ class Model_Action extends Model_PrivateEntite {
     
     public function getVegetable() {
     	if($this->vegetableObj === null) {
-    		$this->vegetableObj =  Gestionnaire::getGestionnaire('Vegetable')->getOne($this->vegetable);
+    		$this->vegetableObj =  Gestionnaire::getGestionnaire(Model_Vegetable::class)->getOne($this->vegetable);
     	}
     	return $this->vegetableObj;
     }

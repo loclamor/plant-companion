@@ -7,7 +7,7 @@ class Controller_Admin extends Controller_Base {
 	}
 	
 	public function maintainPhoto() {
-		$allPhotos = Gestionnaire::getGestionnaire('Photo')->getOf(['utilisateur' => $_SESSION['utiliateur_id']]);
+		$allPhotos = Gestionnaire::getGestionnaire(Model_Photo::class)->getOf(['utilisateur' => $_SESSION['utilisateur_id']]);
 		$ret = '<ul>';
 		foreach ($allPhotos as $photo) {
 			if (!file_exists($photo->getPath()) || !is_file($photo->getPath())) {

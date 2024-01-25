@@ -37,15 +37,15 @@ class Model_History extends Model_PrivateEntite {
     public $donotSerialize = array();
     
     /**
-     * @param $history array{key, old, new}
+     * @param $history array{key:string, old:string, new:string}
      **/
     public function setHistory($entity_id, array $history) {
     	$this->entity_id = $entity_id;
-    	$this->key = $history[0];
-    	$this->oldValue = $this->formatValue($history[1]);
-    	$this->newValue = $this->formatValue($history[2]);
+    	$this->key = $history['key'];
+    	$this->oldValue = $this->formatValue($history['old']);
+    	$this->newValue = $this->formatValue($history['new']);
     	$this->date = date('Y-m-d H:i:s');
-    	$this->utilisateur = $_SESSION['utiliateur_id'];
+    	$this->utilisateur = $_SESSION['utilisateur_id'];
     }
     
     protected function formatValue($value) {

@@ -43,7 +43,7 @@ class Model_Portegreffe extends Model_PrivateEntite {
     
     public function getType() {
     	if($this->typeObj === null) {
-    		$this->typeObj =  Gestionnaire::getGestionnaire('Type')->getOne($this->type);
+    		$this->typeObj =  Gestionnaire::getGestionnaire(Model_Type::class)->getOne($this->type);
     	}
     	return $this->typeObj;
     }

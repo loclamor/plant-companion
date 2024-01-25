@@ -27,12 +27,12 @@
   <?php $mois = ['Choisir...', 'Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre']; 
   if(!empty($this->entity->mois_fleur_debut) && !empty($this->entity->mois_fleur_fin)) { 
   ?>
-  <dt class="col-sm-3">Période de floraison</dt>
+  <dt class="col-sm-3">P&eacute;riode de floraison</dt>
   <dd class="col-sm-9"><?= $mois[$this->entity->getMoisFleurDebut()] ?> - <?= $mois[$this->entity->getMoisFleurFin()] ?></dd>
   <?php } ?>
   
   <?php if(!empty($this->entity->mois_fructi_debut) && !empty($this->entity->mois_fructi_fin)) { ?>
-  <dt class="col-sm-3">Période de récolte</dt>
+  <dt class="col-sm-3">P&eacute;riode de r&eacute;colte</dt>
   <dd class="col-sm-9"><?= $mois[$this->entity->getMoisFructiDebut()] ?> - <?= $mois[$this->entity->getMoisFructiFin()] ?></dd>
   <?php } ?>
   

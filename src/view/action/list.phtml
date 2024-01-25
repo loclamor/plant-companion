@@ -48,9 +48,12 @@ if (is_array($this->entities)) { ?>
 			} ?>
 		</tbody>
 	</table>
+    <?php
+    include BPCF_ROOT . '/view/pagination.phtml';
+    ?>
 <?php
 }
 else { ?>
-	Pas encore d'action ! <a href="<?= PlantUrl::getEdit() ?>" >Créer une action</a>
+	Pas encore d'action ! <a href="<?= PlantUrl::getEdit() ?>" >Cr&eacute;er une action</a>
 <?php
 } ?>

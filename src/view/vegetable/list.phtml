@@ -1,10 +1,11 @@
-<h1>Liste des plantes (<?= $this->nb_vegetables ?>) <a class="btn btn-outline-primary" href="<?= PlantUrl::getEdit() ?>" role="button">+</a></h1>
+<h1>Liste des plantes (<?= $this->nb_entities ?>) <a class="btn btn-outline-primary" href="<?= PlantUrl::getEdit() ?>" role="button">+</a></h1>
 
 <?php
 if (is_array($this->vegetables) || isset($_GET['search-name']) || isset($_GET['search-type'])) { ?>
 	<form class="row g-3" method="GET">
 		<input type="hidden" name="controller" value="vegetable" />
 		<input type="hidden" name="action" value="list" />
+        <input type="hidden" name="filterapply" value="true" />
 		<input type="hidden" name="l" value="<?= $this->length ?>" />
 		<div class="col-auto form-floating">
 			<input id="search-name" name="search-name" class="form-control" type="text" placeholder="Nom" value="<?= $_GET['search-name'] ?? '' ?>">
@@ -21,6 +22,24 @@ if (is_array($this->vegetables) || isset($_GET['search-name']) || isset($_GET['s
 			</select>
 			<label for="search-type">Filtrer par type</label>
 		</div>
+        <div class="col-auto form-floating">
+            <select class="form-select" id="order-by" name="order-by">
+                <?php $orderBy = $_GET['order-by'] ?? 'name'; ?>
+                <option value="id" <?= $orderBy === 'id' ? 'selected' : '' ?> >Date de creation</option>
+                <option value="add_date" <?= $orderBy === 'add_date' ? 'selected' : '' ?> >Date d'ajout</option>
+                <option value="name" <?= $orderBy === 'name' ? 'selected' : '' ?> >Nom</option>
+                <option value="rusticite" <?= $orderBy === 'rusticite' ? 'selected' : '' ?> >Rusticit&eacute;</option>
+            </select>
+            <label for="order-by">Trier par</label>
+        </div>
+        <div class="col-auto form-floating">
+            <select class="form-select" id="order-way" name="order-way">
+                <?php $orderWay = $_GET['order-way'] ?? 'asc'; ?>
+                <option value="desc" <?= $orderWay === 'desc' ? 'selected' : '' ?> >Descendant</option>
+                <option value="asc" <?= $orderWay === 'asc' ? 'selected' : '' ?> >Ascendant</option>
+            </select>
+            <label for="order-way">Sens du tri</label>
+        </div>
 		<div class="col-auto form-floating">
 			<button type="submit" class="btn btn-primary mb-3 btn-lg"><i class="bi bi-search"></i></button>
 		</div>
@@ -59,10 +78,10 @@ if (is_array($this->vegetables) || isset($_GET['search-name']) || isset($_GET['s
 						
 					</div>
 					<form action="<?= PlantUrl::get('photo', 'uploadVegetable', ['vegetable' => $vegetable->getId()]) ?>" method="POST" enctype="multipart/form-data" class="card-footer text-center input-group">
-						<a href="<?= PlantUrl::getView($vegetable->getId()) ?>" class="btn btn-outline-secondary" title="Modifier la plante"><i class="bi bi-pencil-square"></i></a>
+						<a href="<?= PlantUrl::getEdit($vegetable->getId()) ?>" class="btn btn-outline-secondary" title="Modifier la plante"><i class="bi bi-pencil-square"></i></a>
 						<a href="<?= PlantUrl::get('action', 'edit', ['vegetable' => $vegetable->getId()]) ?>" class="card-link btn btn-outline-secondary" title="Ajouter une action"><i class="bi bi-journal-plus"></i></a>
 						
-						<label class="input-group-text btn-outline-secondary  d-none d-md-block" for="photos_<?= $vegetable->getId() ?>" title="Selectionner des photos à ajouter...">+ <span id="nbphotos_<?= $vegetable->getId() ?>"></span> Photos...</label>
+						<label class="input-group-text btn-outline-secondary  d-none d-md-block" for="photos_<?= $vegetable->getId() ?>" title="Selectionner des photos &agrave; ajouter...">+ <span id="nbphotos_<?= $vegetable->getId() ?>"></span> Photos...</label>
 						<input type="file" class="form-control d-none" id="photos_<?= $vegetable->getId() ?>" aria-describedby="inputGroupFileAddon<?= $vegetable->getId() ?>"
 						aria-label="Upload" name='photo[]' accept='image/*' multiple
 						     onchange="inputFileChange(this, <?= $vegetable->getId() ?>)" style="display: none;">
@@ -74,53 +93,22 @@ if (is_array($this->vegetables) || isset($_GET['search-name']) || isset($_GET['s
 		</div>
 	</div>
 	
-	<?php
-	$nbPages = intval(ceil($this->nb_vegetables / $this->length));
-	?>
-	<div class="pagination-container">
-		<nav aria-label="Page navigation example">
-			<ul class="pagination">
-				<li class="page-item <?= $this->page === 1 ? 'disabled' : '' ?>">
-					<a class="page-link" href="<?= PlantUrl::getList(['p' => $this->page - 1]) ?>" aria-label="Previous" >
-						<span aria-hidden="true">&laquo;</span>
-					</a>
-				</li>
-				<?php for ($p = 1; $p <= $nbPages; $p++) { ?>
-					<li class="page-item <?= $p === $this->page ? 'disabled' : '' ?>">
-						<a class="page-link" href="<?= PlantUrl::getList(['p' => $p]) ?>"><?= $p ?></a>
-					</li>
-				<?php } ?>
-				<li class="page-item <?= $nbPages === $this->page ? 'disabled' : '' ?>">
-					<a class="page-link" href="<?= PlantUrl::getList(['p' => $this->page + 1]) ?>" aria-label="Next">
-						<span aria-hidden="true">&raquo;</span>
-					</a>
-				</li>
-			</ul>
-		</nav>
-		<div class="dropdown">
-			<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-				Plantes par pages : <?= $this->length ?>
-			</button>
-			<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-				<li><a class="dropdown-item" href="<?= PlantUrl::getList(['p' => 1, 'l' => 10]) ?>">10</a></li>
-				<li><a class="dropdown-item" href="<?= PlantUrl::getList(['p' => 1, 'l' => 25]) ?>">25</a></li>
-				<li><a class="dropdown-item" href="<?= PlantUrl::getList(['p' => 1, 'l' => 50]) ?>">50</a></li>
-			</ul>
-		</div>
-	</div>
-	<form action="?controller=action&action=edit" method="POST">
+        <?php
+        include BPCF_ROOT . '/view/pagination.phtml';
+        ?>
+	<form action="<?= PlantUrl::getEdit() ?>" method="POST">
 		<div id="multiples_fields"></div>
 		<button class="btn btn-outline-secondary" type="submit" >Action multiple</button>
 	</form>
 	<?php
 	} else { ?>
-		Pas de résultats
+		Pas de r&eacute;sultats
 	<?php } ?>
 	
 <?php
 }
 else { ?>
-	Pas encore de plante ! <a href="<?= PlantUrl::getEdit() ?>" >Créer une plante</a>
+	Pas encore de plante ! <a href="<?= PlantUrl::getEdit() ?>" >Cr&eacute;er une plante</a>
 <?php
 } ?>
 

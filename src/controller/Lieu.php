@@ -2,13 +2,13 @@
 class Controller_Lieu extends Controller_Base {
 	
 	public function list() {
-		$this->entities = Gestionnaire::getGestionnaire('Lieu')->getOf(['utilisateur' => $_SESSION['utiliateur_id']]);
+		$this->entities = Gestionnaire::getGestionnaire(Model_Lieu::class)->getOf(['utilisateur' => $_SESSION['utilisateur_id']]);
 	}
 	
 	public function edit() {
 		$this->entity = new Model_Lieu();
-		if (isset($_GET['id']) && intval($_GET['id']) > 0) {
-			$this->entity = new Model_Lieu(intval($_GET['id']));
+		if (isset($_GET['id']) && (int)$_GET['id'] > 0) {
+			$this->entity = new Model_Lieu((int)$_GET['id']);
 		}
 	}
 	
@@ -16,8 +16,8 @@ class Controller_Lieu extends Controller_Base {
 		// treat null values
 	    $post = array_map(function($value) {return $value === '' ? null : $value; }, $_POST);
 		$entity = new Model_Lieu();
-		if (isset($_GET['id']) && intval($_GET['id']) > 0) {
-			$entity = new Model_Lieu(intval($_GET['id']));
+		if (isset($_GET['id']) && (int)$_GET['id'] > 0) {
+			$entity = new Model_Lieu((int)$_GET['id']);
 		}
 		$entity->hydrater($post);
 		$entity->enregistrer();
@@ -28,8 +28,8 @@ class Controller_Lieu extends Controller_Base {
 	
 	public function view() {
 		$this->entity = new Model_Lieu();
-		if (isset($_GET['id']) && intval($_GET['id']) > 0) {
-			$this->entity = new Model_Lieu(intval($_GET['id']));
+		if (isset($_GET['id']) && (int)$_GET['id'] > 0) {
+			$this->entity = new Model_Lieu((int)$_GET['id']);
 		}
 	}
 }

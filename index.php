@@ -25,35 +25,26 @@ require_once 'src/init.php';
 	    	Plant Companion
     	</a>
 	    <?php if (PlantCompanion::getInstance()->getCurrentUser() !== false) { ?>
-		    <form class="d-flex" method="POST" action="<?= PlantUrl::get('base', 'applyGroup') ?>">
-		        <select class="form-select" name="selectedBaseListGroup">
+		    <form class="d-flex flex-grow-1 w-40" method="POST" action="<?= PlantUrl::get('base', 'applyGroup') ?>" id="group-changer">
+		        <select class="form-select" name="selectedBaseListGroup" id="group-changer-select">
 					<?php foreach ($_SESSION['baseListGroup'] as $group) { ?>
 						<option value="<?= $group->getId() ?>" <?= (int) $group->getId() === (int) $_SESSION['selectedBaseListGroup'] ? 'selected' : ''?>><?= $group->getName() ?></option>
 					<?php } ?>
 				</select>
-				<input type="submit" value="Changer">
 		    </form>
-		    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <br/>
+            <a class="nav-link" href="<?= PlantUrl::get('vegetable', 'list', []) ?>">Plantes</a>
+            <a class="nav-link" href="<?= PlantUrl::get('action', 'list', []) ?>">Actions</a>
+            <a class="nav-link" href="<?= PlantUrl::get('photo', 'uploadMultipleV2', []) ?>"><span class="add_ico"><i class="bi bi-camera"></i></span></a>
+            <a class="nav-link" href="<?= PlantUrl::get('calendar', 'fructification', []) ?>"><i class="bi bi-calendar-range"></i>&nbsp;</a>
+            <a class="nav-link" href="<?= PlantUrl::get('print', 'bytype', []) ?>"><i class="bi bi-printer"></i></a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		      <span class="navbar-toggler-icon"></span>
 		    </button>
 		    
 		    <div class="collapse navbar-collapse" id="navbarSupportedContent">
 		      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-		        <li class="nav-item">
-		          <a class="nav-link" href="<?= PlantUrl::get('vegetable', 'list', []) ?>">Plantes</a>
-		        </li>
-		        <li class="nav-item">
-		          <a class="nav-link" href="<?= PlantUrl::get('action', 'list', []) ?>">Actions</a>
-		        </li>
-		        <li class="nav-item">
-		          <a class="nav-link" href="<?= PlantUrl::get('photo', 'uploadMultipleV2', []) ?>"><span class="add_ico"><i class="bi bi-camera"></i></span></a>
-		        </li>
-		        <li class="nav-item">
-		          <a class="nav-link" href="<?= PlantUrl::get('calendar', 'fructification', []) ?>"><i class="bi bi-calendar-range"></i>&nbsp;Planning</a>
-		        </li>
-		        <li class="nav-item">
-		          <a class="nav-link" href="<?= PlantUrl::get('print', 'bytype', []) ?>"><i class="bi bi-printer"></i></a>
-		        </li>
 		        <li class="nav-item dropdown">
 		          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 		            Paramétrage
@@ -83,10 +74,11 @@ require_once 'src/init.php';
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script>
-    	// alert("width = " + screen.width + "x" + screen.height
-    	// 	+ "\n DPR = " + window.devicePixelRatio
-    	// 	+ "\n userAgent = " + navigator.userAgent);
-    	//	document.getElementById('UserAgent').value = navigator.userAgent;
+
+        document.getElementById('group-changer-select').onchange = () => {
+            document.getElementById('group-changer').submit();
+        };
+
     </script>
   </body>
 </html>

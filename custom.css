@@ -56,6 +56,15 @@
   --main-primary-darker: #006800;
 }
 
+.pagination {
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.w-40 {
+    width: 40%!important;
+}
+
 .disabled {
     background-color: #e9ecef;
     pointer-events: none;
